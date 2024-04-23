@@ -1,0 +1,55 @@
+openapi: 3.0.0
+info:
+  title: Chat API
+  version: 1.0.0
+  description: API for managing chat information
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /api/v1/chat/my:
+    get:
+      summary: Retrieve chat information
+      description: Returns information about the current chat session.
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatInfo'
+
+  /api/v1/info:
+    get:
+      summary: Retrieve application information
+      description: Returns information about the chat application.
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppInfo'
+
+components:
+  schemas:
+    ChatInfo:
+      type: object
+      properties:
+        chatId:
+          type: string
+          description: Unique identifier for the chat session.
+    AppInfo:
+      type: object
+      properties:
+        appName:
+          type: string
+          description: Name of the application.
+        developers:
+          type: string
+          description: Developers of the application.
+        description:
+          type: string
+          description: Description of the application.
+
