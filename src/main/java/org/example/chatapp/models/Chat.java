@@ -9,6 +9,18 @@ import org.springframework.data.cassandra.core.mapping.Table;
 public class Chat {
     @PrimaryKey
     private UUID chatId;
+    private UUID userId;
+    private Instant createdTime;
+
+    public Chat() {}
+
+
+
+    public Chat(UUID chatId, UUID userId, Instant createdTime) {
+        this.chatId = chatId;
+        this.userId = userId;
+        this.createdTime = createdTime;
+    }
 
     public UUID getChatId() {
         return chatId;
@@ -33,9 +45,4 @@ public class Chat {
     public void setCreatedTime(Instant createdTime) {
         this.createdTime = createdTime;
     }
-
-    private UUID userId;
-    private Instant createdTime;
-
-    // Getters and setters
 }

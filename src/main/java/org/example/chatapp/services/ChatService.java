@@ -21,6 +21,14 @@ public class ChatService {
         this.userChatRepository = userChatRepository;
     }
 
+    public Chat createChat(UUID userId) {
+        Chat chat = new Chat();
+        chat.setChatId(UUID.randomUUID());
+        chat.setUserId(userId);
+        chat.setCreatedTime(Instant.now());
+        return chatRepository.save(chat);
+    }
+
     public String processChat(UUID userId, UUID chatId, String userMessage) {
         // Check if a chat record exists with the given chatId and userId
         Optional<Chat> existingChat = chatRepository.findByChatIdAndUserId(chatId, userId);
@@ -39,6 +47,7 @@ public class ChatService {
 
         // Store user chat in the database
         UserChat userChat = new UserChat();
+        userChat.setId(UUID.randomUUID());
         userChat.setUserId(userId);
         userChat.setChatId(chatId);
         userChat.setRole("user");
@@ -48,6 +57,7 @@ public class ChatService {
 
         // Store bot chat in the database
         UserChat botChat = new UserChat();
+        botChat.setId(UUID.randomUUID());
         botChat.setUserId(userId);
         botChat.setChatId(chatId);
         botChat.setRole("bot");

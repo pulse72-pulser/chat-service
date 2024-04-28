@@ -8,11 +8,34 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Table("user_chat")
 public class UserChat {
     @PrimaryKey
+    private UUID id;
+
     private UUID userId;
+
     private UUID chatId;
     private String role;
     private Instant createdTime;
     private double[] textEmbedding;
+
+    public UserChat() {
+    }
+
+    public UserChat(UUID id, UUID userId, UUID chatId, String role, Instant createdTime, double[] textEmbedding) {
+        this.id = id;
+        this.userId = userId;
+        this.chatId = chatId;
+        this.role = role;
+        this.createdTime = createdTime;
+        this.textEmbedding = textEmbedding;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public UUID getUserId() {
         return userId;
@@ -53,6 +76,4 @@ public class UserChat {
     public void setTextEmbedding(double[] textEmbedding) {
         this.textEmbedding = textEmbedding;
     }
-
-    // Getters and setters
 }

@@ -6,12 +6,18 @@ import org.example.chatapp.services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.example.chatapp.models.Chat;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.security.Principal;
+import java.util.UUID;
 
 @RestController
 @Slf4j
@@ -32,12 +38,24 @@ public class ChatController {
         return ResponseEntity.ok(ChatInfo.builder().chatId("ABC").build());
     }
 
-//    @PostMapping("/chat")
-//    public String chat(@RequestBody ChatRequest request) {
-//        UUID userId = request.getUserId();
-//        UUID chatId = request.getChatId();
-//        String userMessage = request.getUserMessage();
-//        return chatService.processChat(userId, chatId, userMessage);
-//    }
+    @PostMapping("/chats")
+    public ResponseEntity<UUID> createChat() {
+        // Hardcoded user ID for testing
+        UUID userId = UUID.fromString("user_id_value_here");
+
+        Chat createdChat = chatService.createChat(userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdChat.getChatId());
+    }
+
+    @PostMapping("/chats/{chatId}/messages")
+    public ResponseEntity<String> sendUserChat(@RequestBody String userMessage) {
+        // Hardcoded chat ID and user ID for testing
+        UUID chatId = UUID.fromString("chat_id_value_here");
+        UUID userId = UUID.fromString("user_id_value_here");
+
+        String botResponse = chatService.processChat(userId, chatId, userMessage);
+        return ResponseEntity.ok(botResponse);
+    }
+
 
 }
