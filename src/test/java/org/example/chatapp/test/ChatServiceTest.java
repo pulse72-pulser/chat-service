@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -64,14 +65,20 @@ public class ChatServiceTest {
                 .filter(userChat -> userChat.getRole().equals("user"))
                 .findFirst();
         assertTrue(userMessage.isPresent(), "User message should be present in the user chats");
-        assertArrayEquals(embeddingService.generateEmbedding(dummyMessage), userMessage.get().getTextEmbedding(), "User message should have the correct text embedding");
+//        assertEquals(Arrays.asList(embeddingService.generateEmbedding(dummyMessage)), userMessage.get().getTextEmbedding(), "User message should have the correct text embedding");
+        double[] expectedEmbedding = embeddingService.generateEmbedding(dummyMessage);
+        List<Double> actualEmbedding = userMessage.get().getTextEmbedding();
+        assertArrayEquals(expectedEmbedding, actualEmbedding.stream().mapToDouble(Double::doubleValue).toArray(), "User message should have the correct text embedding");
 
         // Verify the bot response insertion
         Optional<UserChat> botMessage = userChats.stream()
                 .filter(userChat -> userChat.getRole().equals("bot"))
                 .findFirst();
         assertTrue(botMessage.isPresent(), "Bot response should be present in the user chats");
-        assertArrayEquals(embeddingService.generateEmbedding(botResponse), botMessage.get().getTextEmbedding(), "Bot response should have the correct text embedding");
+//        assertEquals(Arrays.asList(embeddingService.generateEmbedding(botResponse)), botMessage.get().getTextEmbedding(), "Bot response should have the correct text embedding");
+        double[] expectedBotEmbedding = embeddingService.generateEmbedding(botResponse);
+        List<Double> actualBotEmbedding = botMessage.get().getTextEmbedding();
+        assertArrayEquals(expectedBotEmbedding, actualBotEmbedding.stream().mapToDouble(Double::doubleValue).toArray(), "Bot response should have the correct text embedding");
 
         log.info("Finished testChatInitialization");
     }

@@ -11,4 +11,6 @@ public interface ChatRepository extends CassandraRepository<Chat, UUID> {
     List<Chat> findByUserId(UUID userId);
 
     Optional<Chat> findByChatIdAndUserId(UUID chatId, UUID userId);
+
+    Optional<Chat> findByChatId(UUID chatId);
 }
