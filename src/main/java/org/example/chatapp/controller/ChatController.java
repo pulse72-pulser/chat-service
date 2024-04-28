@@ -5,9 +5,11 @@ import org.example.chatapp.dto.ChatInfo;
 import org.example.chatapp.services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -32,9 +35,10 @@ public class ChatController {
         this.chatService = chatService;
     }
     @RequestMapping("/my")
-    public ResponseEntity<ChatInfo> chatInfo(){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info(principal.toString());
+    public ResponseEntity<ChatInfo> chatInfo(@AuthenticationPrincipal Jwt jwt){
+        Map<String, Object> claims = jwt.getClaims();
+        String sub = (String) claims.get("sub");
+        log.info("User sub: {}", sub);
         return ResponseEntity.ok(ChatInfo.builder().chatId("ABC").build());
     }
 
@@ -59,3 +63,4 @@ public class ChatController {
 
 
 }
+
