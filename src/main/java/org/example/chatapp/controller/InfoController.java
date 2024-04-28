@@ -14,7 +14,7 @@ public class InfoController {
     public ResponseEntity<AppInfo> open(){
         return ResponseEntity.ok(AppInfo.builder()
                 .appName("chat-app-service")
-                .developers("Ayesh Vininda & Dilusha Pulle")
+                .developers("Ayesh Vininda & Dilusha Madushan")
                 .description("This app secured by WS02 Asgardeo")
                 .build());
     }

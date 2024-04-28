@@ -1,0 +1,14 @@
+package org.example.chatapp.repository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.example.chatapp.models.Chat;
+import org.springframework.data.cassandra.repository.CassandraRepository;
+
+public interface ChatRepository extends CassandraRepository<Chat, UUID> {
+    List<Chat> findByUserId(UUID userId);
+
+    Optional<Chat> findByChatIdAndUserId(UUID chatId, UUID userId);
+}
