@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.naming.directory.InvalidAttributesException;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,11 +19,14 @@ public class ChatService {
 
     private static final Logger log = LoggerFactory.getLogger(AstraDbConfig.class);
     private final EmbeddingService embeddingService;
+
+    private final ChatApiService chatApiService;
     private final ChatRepository chatRepository;
     private final UserChatRepository userChatRepository;
 
-    public ChatService(EmbeddingService embeddingService, ChatRepository chatRepository, UserChatRepository userChatRepository) {
+    public ChatService(EmbeddingService embeddingService, ChatApiService chatApiService, ChatRepository chatRepository, UserChatRepository userChatRepository) {
         this.embeddingService = embeddingService;
+        this.chatApiService = chatApiService;
         this.chatRepository = chatRepository;
         this.userChatRepository = userChatRepository;
     }
@@ -87,7 +89,6 @@ public class ChatService {
         // Check if a chat record exists with the given chatId and userId
         Optional<Chat> existingChat = chatRepository.findByChatId(chatId);
         if (existingChat.isEmpty()) {
-            log.error(String.valueOf(chatId) + " " + String.valueOf(userId));
             throw new IllegalArgumentException("Invalid chatId or userId");
         }
 
@@ -97,7 +98,9 @@ public class ChatService {
                 .collect(Collectors.toList());
 
         // Get the response from the chat model (hardcoded for testing)
-        String botResponse = "This is a hardcoded response from the chat model.";
+//        String botResponse = "This is a hardcoded response from the chat model.";
+
+        String botResponse = chatApiService.getResponseFromBot(userMessage);
 
         // Generate embeddings for the bot response
         List<Double> botEmbedding = Arrays.stream(embeddingService.generateEmbedding(botResponse))
