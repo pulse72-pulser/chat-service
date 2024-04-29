@@ -1,7 +1,9 @@
 package org.example.chatapp.test;
 
-import org.example.chatapp.ChatappApplication;
+import org.example.chatapp.ChatAppApplication;
 import org.example.chatapp.config.AstraDbConfig;
+import org.example.chatapp.dto.ChatCreated;
+import org.example.chatapp.dto.CreateNewChat;
 import org.example.chatapp.models.Chat;
 import org.example.chatapp.models.UserChat;
 import org.example.chatapp.repository.ChatRepository;
@@ -12,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,8 +23,8 @@ import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = ChatappApplication.class)
-public class ChatServiceTest {
+@SpringBootTest(classes = ChatAppApplication.class)
+public class ChatInfoServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(AstraDbConfig.class);
     @Autowired
@@ -44,8 +45,11 @@ public class ChatServiceTest {
         log.info("Starting testChatInitialization");
         // Create a dummy chat
         UUID dummyUserId = UUID.fromString("123e4567-e89b-12d3-a456-426655440000");
-        Chat createdChat = chatService.createChat(dummyUserId);
-        UUID chatId = createdChat.getChatId();
+        CreateNewChat createNewChat = CreateNewChat.builder()
+                .chatName("new-chat")
+                .build();
+        ChatCreated createdChat = chatService.createChat(dummyUserId,createNewChat);
+        UUID chatId = UUID.fromString(createdChat.getChatId());
 
         // Add a dummy test message to the created chat
         String dummyMessage = "This is a dummy test message";

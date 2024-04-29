@@ -10,13 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatInfo {
+public class NewMessage {
     @JsonProperty("chat_id")
     private String chatId;
-
-    @JsonProperty("chat_name")
-    private String chatName;
-
-    @JsonProperty("created_at")
-    private String createdAt;
+    private String text;
 }
