@@ -10,11 +10,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserChatRepository extends CassandraRepository<UserChat, UUID> {
 
+
     List<UserChat> findByChatId(UUID chatId);
 
-    @Query("SELECT * FROM user_chat WHERE cosine_similarity(text_embedding, :embedding) > :threshold")
-    List<UserChat> findBySimilarEmbedding(@Param("embedding") double[] embedding, @Param("threshold") double threshold);
+    @Query("SELECT * FROM default_keyspace.user_chat WHERE cosine_similarity(text_embedding, :embedding) > :threshold")
+    List<UserChat> findBySimilarEmbedding(@Param("embedding") List<Double> embedding, @Param("threshold") double threshold);
 
-    @Query("SELECT * FROM user_chat WHERE user_id = :userId ORDER BY cosine_similarity(text_embedding, :embedding) DESC LIMIT 1")
-    UserChat findMostSimilarByUserIdAndEmbedding(@Param("userId") UUID userId, @Param("embedding") double[] embedding);
+    @Query("SELECT * FROM default_keyspace.user_chat WHERE user_id = :userId ORDER BY cosine_similarity(text_embedding, :embedding) DESC LIMIT 1")
+    UserChat findMostSimilarByUserIdAndEmbedding(@Param("userId") UUID userId, @Param("embedding") List<Double> embedding);
 }

@@ -1,18 +1,17 @@
-DROP TABLE IF EXISTS chat;
-DROP TABLE IF EXISTS user_chat;
+DROP TABLE IF EXISTS default_keyspace.chat;
+DROP TABLE IF EXISTS default_keyspace.user_chat;
 
-CREATE TABLE IF NOT EXISTS chat (
+CREATE TABLE IF NOT EXISTS default_keyspace.chat (
   chatid uuid PRIMARY KEY,
   userid uuid,
   createdtime timestamp
 );
 
-CREATE TABLE IF NOT EXISTS user_chat (
-  id uuid,
+CREATE TABLE IF NOT EXISTS default_keyspace.user_chat (
+  id uuid PRIMARY KEY,
   userid uuid,
   chatid uuid,
   role text,
   createdtime timestamp,
-  textembedding list<double>,
-  PRIMARY KEY (id)
+  textembedding list<double>
 );

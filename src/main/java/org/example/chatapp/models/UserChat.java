@@ -1,6 +1,7 @@
 package org.example.chatapp.models;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
@@ -15,12 +16,12 @@ public class UserChat {
     private UUID chatId;
     private String role;
     private Instant createdTime;
-    private double[] textEmbedding;
+    private List<Double> textEmbedding;
 
     public UserChat() {
     }
 
-    public UserChat(UUID id, UUID userId, UUID chatId, String role, Instant createdTime, double[] textEmbedding) {
+    public UserChat(UUID id, UUID userId, UUID chatId, String role, Instant createdTime, List<Double> textEmbedding) {
         this.id = id;
         this.userId = userId;
         this.chatId = chatId;
@@ -69,11 +70,11 @@ public class UserChat {
         this.createdTime = createdTime;
     }
 
-    public double[] getTextEmbedding() {
+    public List<Double> getTextEmbedding() {
         return textEmbedding;
     }
 
-    public void setTextEmbedding(double[] textEmbedding) {
+    public void setTextEmbedding(List<Double> textEmbedding) {
         this.textEmbedding = textEmbedding;
     }
 }
