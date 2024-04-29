@@ -1,6 +1,7 @@
 package org.example.chatapp.services;
 
 import org.example.chatapp.config.AstraDbConfig;
+import org.example.chatapp.dto.*;
 import org.example.chatapp.models.Chat;
 import org.example.chatapp.models.UserChat;
 import org.example.chatapp.repository.ChatRepository;
@@ -8,11 +9,10 @@ import org.example.chatapp.repository.UserChatRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import javax.naming.directory.InvalidAttributesException;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,22 +29,61 @@ public class ChatService {
         this.userChatRepository = userChatRepository;
     }
 
-    public Chat createChat(UUID userId) {
+    // FIXME: add the chat name here
+    public ChatCreated createChat(UUID userId, CreateNewChat newChat) {
         Chat chat = new Chat();
         chat.setChatId(UUID.randomUUID());
         chat.setUserId(userId);
         chat.setCreatedTime(Instant.now());
-        return chatRepository.save(chat);
+        chat = chatRepository.save(chat);
+
+
+        return ChatCreated.builder()
+                .chatName("optional")
+                .chatId(chat.getChatId().toString())
+                .userId(chat.getUserId().toString())
+                .createdAt(chat.getCreatedTime().toString())
+                .message("new chat created.")
+                .build();
     }
 
-    public List<UUID> getChatIdsByUserId(UUID userId) {
+    public GetChats getChatIdsByUserId(UUID userId) {
         List<Chat> chats = chatRepository.findByUserId(userId);
-        return chats.stream()
-                .map(Chat::getChatId)
-                .collect(Collectors.toList());
+        List<GetChat> chatList = new ArrayList<>();
+
+        for (Chat chat : chats) {
+            chatList.add(GetChat.builder()
+                        .chatId(chat.getChatId().toString())
+                        .chatName("optional")
+                        .createdAt(chat.getCreatedTime().toString())
+                        .userId(chat.getUserId().toString())
+                        .build());
+        }
+
+        return GetChats.builder()
+                .chats(chatList)
+                .build();
     }
 
-    public String processChat(UUID userId, UUID chatId, String userMessage) {
+    public GetChat getChatById(UUID chatId,UUID userId) {
+        Chat chat = chatRepository.findById(chatId).orElse(null);
+
+        if (chat == null) {
+            throw new IllegalArgumentException("invalid chat id");
+        }
+        if (!chat.getUserId().equals(userId)) {
+            throw new IllegalArgumentException("invalid user id");
+        }
+
+        return GetChat.builder()
+                .chatId(chat.getChatId().toString())
+                .chatName("optional")
+                .createdAt(chat.getCreatedTime().toString())
+                .userId(chat.getUserId().toString())
+                .build();
+    }
+
+    public ReplyMessage processChat(UUID userId, UUID chatId, String userMessage) {
         // Check if a chat record exists with the given chatId and userId
         Optional<Chat> existingChat = chatRepository.findByChatId(chatId);
         if (existingChat.isEmpty()) {
@@ -85,6 +124,13 @@ public class ChatService {
         botChat.setTextEmbedding(botEmbedding);
         userChatRepository.save(botChat);
 
-        return botResponse;
+//        return botResponse;
+
+        return ReplyMessage.builder()
+                .text(botResponse)
+                .author("bot")
+                .createdAt(botChat.getCreatedTime().toString())
+                .build();
     }
+
 }
