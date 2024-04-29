@@ -10,7 +10,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.security.oauth2.jwt.Jwt;
+
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 import org.example.chatapp.models.Chat;
 import org.springframework.http.HttpStatus;
@@ -68,3 +73,4 @@ public class ChatController {
 
 
 }
+
