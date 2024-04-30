@@ -40,6 +40,10 @@ public class AstraDbConfig {
 
     @Bean
     public CqlSession cqlSession() {
+        Assert.hasText(secureConnectBundle, "Secure connect bundle must not be empty");
+        Assert.hasText(keyspace, "Keyspace must not be empty");
+        Assert.hasText(username, "Username must not be empty");
+        Assert.hasText(password, "Password must not be empty");
         try {
             Path bundle = Paths.get(secureConnectBundle);
             return CqlSession.builder()
