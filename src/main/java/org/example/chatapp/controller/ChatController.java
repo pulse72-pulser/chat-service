@@ -2,10 +2,7 @@ package org.example.chatapp.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.chatapp.dto.ChatCreated;
-import org.example.chatapp.dto.CreateNewChat;
-import org.example.chatapp.dto.GetChat;
-import org.example.chatapp.dto.GetChats;
+import org.example.chatapp.dto.*;
 import org.example.chatapp.services.ChatService;
 import org.example.chatapp.services.JwtService;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +34,11 @@ public class ChatController {
     }
 
     @GetMapping("/{chat_id}")
-    public ResponseEntity<GetChat> getChat(@AuthenticationPrincipal Jwt jwt, @PathVariable("chat_id") UUID chatId){
+    public ResponseEntity<GetUserChats> getChat(@AuthenticationPrincipal Jwt jwt, @PathVariable("chat_id") UUID chatId){
         UUID userId = jwtService.getUserId(jwt);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body( chatService.getChatById(chatId,userId));
+                .body( chatService.getChatByChatIdAndUserId(chatId,userId));
     }
 
     @GetMapping()

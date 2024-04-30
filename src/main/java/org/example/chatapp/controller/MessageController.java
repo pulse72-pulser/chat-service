@@ -23,13 +23,13 @@ public class MessageController {
     private final JwtService jwtService;
 
     @PostMapping
-    public ResponseEntity<ReplyMessage> sendUserChat(@AuthenticationPrincipal Jwt jwt, @RequestBody NewMessage message){
+    public ResponseEntity<ReplyMessage> sendUserChat(@AuthenticationPrincipal Jwt jwt, @RequestBody NewMessage body){
         UUID userId  = jwtService.getUserId(jwt);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(chatService.processChat(
                         userId,
-                        UUID.fromString(message.getChatId()),
-                        message.getText()));
+                        UUID.fromString(body.getChatId()),
+                        body.getText()));
 
     }
 }

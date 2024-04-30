@@ -6,6 +6,7 @@ import org.example.chatapp.models.Chat;
 import org.example.chatapp.models.UserChat;
 import org.example.chatapp.repository.ChatRepository;
 import org.example.chatapp.repository.UserChatRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -42,7 +43,8 @@ public class ChatService {
     }
 
     public GetChats getChatIdsByUserId(UUID userId) {
-        List<Chat> chats = chatRepository.findByUserId(userId);
+        Sort sort = Sort.by(Sort.Direction.ASC, "createdTime");
+        List<Chat> chats = chatRepository.findByUserId(userId, sort);
         List<GetChat> chatList = new ArrayList<>();
 
         for (Chat chat : chats) {
@@ -59,7 +61,8 @@ public class ChatService {
                 .build();
     }
 
-    public GetChat getChatById(UUID chatId,UUID userId) {
+    public GetUserChats getChatByChatIdAndUserId(UUID chatId, UUID userId) {
+
         Chat chat = chatRepository.findById(chatId).orElse(null);
 
         if (chat == null) {
@@ -69,11 +72,20 @@ public class ChatService {
             throw new IllegalArgumentException("invalid user id");
         }
 
-        return GetChat.builder()
-                .chatId(chat.getChatId().toString())
-                .chatName(chat.getChatName())
-                .createdAt(chat.getCreatedTime().toString())
-                .userId(chat.getUserId().toString())
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdTime");
+        List<UserChat> userChats = userChatRepository.findByUserIdAndChatId(userId, chatId, sort);
+
+        List<GetUserChat> UserChatList = new ArrayList<>();
+
+        for (UserChat userChat : userChats) {
+            UserChatList.add(GetUserChat.builder()
+                            .role(userChat.getRole())
+                            .text(userChat.getText())
+                    .build());
+        }
+
+        return GetUserChats.builder()
+                .UserChats(UserChatList)
                 .build();
     }
 
