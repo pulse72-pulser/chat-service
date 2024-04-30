@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 public class ChatService {
 
     private static final Logger log = LoggerFactory.getLogger(AstraDbConfig.class);
-    private final EmbeddingService embeddingService;
+//    private final EmbeddingService embeddingService;
 
     private final ChatApiService chatApiService;
     private final ChatRepository chatRepository;
     private final UserChatRepository userChatRepository;
 
-    public ChatService(EmbeddingService embeddingService, ChatApiService chatApiService, ChatRepository chatRepository, UserChatRepository userChatRepository) {
-        this.embeddingService = embeddingService;
+    public ChatService( ChatApiService chatApiService, ChatRepository chatRepository, UserChatRepository userChatRepository) {
+//        this.embeddingService = embeddingService;
         this.chatApiService = chatApiService;
         this.chatRepository = chatRepository;
         this.userChatRepository = userChatRepository;
@@ -93,9 +93,10 @@ public class ChatService {
         }
 
         // Generate embeddings for the user message
-        List<Double> userEmbedding = Arrays.stream(embeddingService.generateEmbedding(userMessage))
-                .boxed()
-                .collect(Collectors.toList());
+//        List<Double> userEmbedding = Arrays.stream(embeddingService.generateEmbedding(userMessage))
+//                .boxed()
+//                .collect(Collectors.toList());
+        List<Double> userEmbedding = null;
 
         // Get the response from the chat model (hardcoded for testing)
 //        String botResponse = "This is a hardcoded response from the chat model.";
@@ -103,9 +104,10 @@ public class ChatService {
         String botResponse = chatApiService.getResponseFromBot(userMessage);
 
         // Generate embeddings for the bot response
-        List<Double> botEmbedding = Arrays.stream(embeddingService.generateEmbedding(botResponse))
-                .boxed()
-                .collect(Collectors.toList());
+//        List<Double> botEmbedding = Arrays.stream(embeddingService.generateEmbedding(botResponse))
+//                .boxed()
+//                .collect(Collectors.toList());
+
 
         // Store user chat in the database
         UserChat userChat = new UserChat();
@@ -114,7 +116,7 @@ public class ChatService {
         userChat.setChatId(chatId);
         userChat.setRole("user");
         userChat.setCreatedTime(Instant.now());
-        userChat.setTextEmbedding(userEmbedding);
+        userChat.setTextEmbedding(null);
         userChatRepository.save(userChat);
 
         // Store bot chat in the database
@@ -124,7 +126,7 @@ public class ChatService {
         botChat.setChatId(chatId);
         botChat.setRole("bot");
         botChat.setCreatedTime(Instant.now());
-        botChat.setTextEmbedding(botEmbedding);
+        botChat.setTextEmbedding(null);
         userChatRepository.save(botChat);
 
 //        return botResponse;
