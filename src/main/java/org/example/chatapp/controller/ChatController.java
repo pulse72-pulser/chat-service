@@ -28,10 +28,6 @@ public class ChatController {
     private final ChatService chatService;
     private final JwtService jwtService;
 
-//    @Autowired
-//    public ChatController(ChatService chatService) {
-//        this.chatService = chatService;
-//    }
 
     @PostMapping()
     public ResponseEntity<ChatCreated> createChat(@AuthenticationPrincipal Jwt jwt, @RequestBody CreateNewChat newChat){

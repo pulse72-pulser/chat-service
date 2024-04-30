@@ -19,7 +19,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        oauth->oauth.requestMatchers("/api/v1/info/**")
+                        oauth->oauth.requestMatchers("/info/**")
                         .permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2

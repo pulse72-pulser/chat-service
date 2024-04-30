@@ -4,6 +4,7 @@ import org.example.chatapp.ChatAppApplication;
 import org.example.chatapp.config.AstraDbConfig;
 import org.example.chatapp.dto.ChatCreated;
 import org.example.chatapp.dto.CreateNewChat;
+import org.example.chatapp.dto.ReplyMessage;
 import org.example.chatapp.models.Chat;
 import org.example.chatapp.models.UserChat;
 import org.example.chatapp.repository.ChatRepository;
@@ -53,7 +54,8 @@ public class ChatInfoServiceTest {
 
         // Add a dummy test message to the created chat
         String dummyMessage = "This is a dummy test message";
-        String botResponse = chatService.processChat(dummyUserId, chatId, dummyMessage);
+        ReplyMessage botResponse = chatService.processChat(dummyUserId, chatId, dummyMessage);
+//        String botResponse = chatService.processChat(dummyUserId, chatId, dummyMessage);
 
         // Verify the chat insertion
         Optional<Chat> retrievedChat = chatRepository.findById(chatId);
@@ -80,7 +82,7 @@ public class ChatInfoServiceTest {
                 .findFirst();
         assertTrue(botMessage.isPresent(), "Bot response should be present in the user chats");
 //        assertEquals(Arrays.asList(embeddingService.generateEmbedding(botResponse)), botMessage.get().getTextEmbedding(), "Bot response should have the correct text embedding");
-        double[] expectedBotEmbedding = embeddingService.generateEmbedding(botResponse);
+        double[] expectedBotEmbedding = embeddingService.generateEmbedding(botResponse.getText());
         List<Double> actualBotEmbedding = botMessage.get().getTextEmbedding();
         assertArrayEquals(expectedBotEmbedding, actualBotEmbedding.stream().mapToDouble(Double::doubleValue).toArray(), "Bot response should have the correct text embedding");
 

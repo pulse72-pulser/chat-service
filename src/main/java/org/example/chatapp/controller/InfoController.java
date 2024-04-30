@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/v1/info")
+@RequestMapping("/info")
 public class InfoController {
     @GetMapping
     public ResponseEntity<AppInfo> open(){
