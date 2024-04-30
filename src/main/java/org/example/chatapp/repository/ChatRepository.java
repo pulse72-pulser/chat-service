@@ -6,7 +6,9 @@ import java.util.UUID;
 
 import org.example.chatapp.models.Chat;
 import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ChatRepository extends CassandraRepository<Chat, UUID> {
     List<Chat> findByUserId(UUID userId);
 

@@ -1,5 +1,6 @@
 package org.example.chatapp.services;
 
+import lombok.RequiredArgsConstructor;
 import org.example.chatapp.config.AstraDbConfig;
 import org.example.chatapp.dto.*;
 import org.example.chatapp.models.Chat;
@@ -15,21 +16,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ChatService {
 
-    private static final Logger log = LoggerFactory.getLogger(AstraDbConfig.class);
+//    private static final Logger log = LoggerFactory.getLogger(AstraDbConfig.class);
 //    private final EmbeddingService embeddingService;
 
     private final ChatApiService chatApiService;
     private final ChatRepository chatRepository;
     private final UserChatRepository userChatRepository;
 
-    public ChatService( ChatApiService chatApiService, ChatRepository chatRepository, UserChatRepository userChatRepository) {
-//        this.embeddingService = embeddingService;
-        this.chatApiService = chatApiService;
-        this.chatRepository = chatRepository;
-        this.userChatRepository = userChatRepository;
-    }
+//    public ChatService( ChatApiService chatApiService, ChatRepository chatRepository, UserChatRepository userChatRepository) {
+////        this.embeddingService = embeddingService;
+//        this.chatApiService = chatApiService;
+//        this.chatRepository = chatRepository;
+//        this.userChatRepository = userChatRepository;
+//    }
 
     // FIXME: add the chat name here
     public ChatCreated createChat(UUID userId, CreateNewChat newChat) {
