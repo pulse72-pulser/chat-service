@@ -98,7 +98,7 @@ public class ChatService {
 //        List<Double> userEmbedding = Arrays.stream(embeddingService.generateEmbedding(userMessage))
 //                .boxed()
 //                .collect(Collectors.toList());
-        List<Double> userEmbedding = null;
+//        List<Double> userEmbedding = null;
 
         // Get the response from the chat model (hardcoded for testing)
 //        String botResponse = "This is a hardcoded response from the chat model.";
