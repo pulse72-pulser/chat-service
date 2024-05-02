@@ -29,6 +29,7 @@ public class ChatController {
     @PostMapping()
     public ResponseEntity<ChatCreated> createChat(@AuthenticationPrincipal Jwt jwt, @RequestBody CreateNewChat newChat){
         UUID userId = jwtService.getUserId(jwt);
+        log.info(userId.toString());
         return ResponseEntity.status(HttpStatus.CREATED)
                  .body(chatService.createChat(userId,newChat));
     }

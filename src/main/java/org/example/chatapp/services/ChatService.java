@@ -43,7 +43,7 @@ public class ChatService {
     }
 
     public GetChats getChatIdsByUserId(UUID userId) {
-        Sort sort = Sort.by(Sort.Direction.ASC, "createdTime");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdTime");
         List<Chat> chats = chatRepository.findByUserId(userId, sort);
         List<GetChat> chatList = new ArrayList<>();
 
@@ -72,7 +72,7 @@ public class ChatService {
             throw new IllegalArgumentException("invalid user id");
         }
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdTime");
+        Sort sort = Sort.by(Sort.Direction.ASC, "createdTime");
         List<UserChat> userChats = userChatRepository.findByUserIdAndChatId(userId, chatId, sort);
 
         List<GetUserChat> UserChatList = new ArrayList<>();
